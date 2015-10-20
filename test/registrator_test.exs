@@ -2,6 +2,7 @@ defmodule RegistratorTest do
   use PhoenixTokenAuth.Case
   import PhoenixTokenAuth.Util
   alias PhoenixTokenAuth.Registrator
+  alias PhoenixTokenAuth.TestRepo
 
   setup do
     on_exit fn ->
@@ -35,8 +36,9 @@ defmodule RegistratorTest do
   end
 
   test "changeset validates uniqueness of email" do
-    user = Forge.saved_user PhoenixTokenAuth.TestRepo
-    changeset = Registrator.changeset(%{"email" => user.email})
+    user = Forge.saved_user TestRepo
+    {:error, changeset} = Registrator.changeset(%{@valid_params | "email" => user.email})
+    |> TestRepo.insert
 
     assert changeset.errors[:email] == "has already been taken"
   end
@@ -77,8 +79,9 @@ defmodule RegistratorTest do
     assert changeset.valid?
   end
   test "changeset validates uniqueness of username" do
-    user = Forge.saved_user PhoenixTokenAuth.TestRepo
-    changeset = Registrator.changeset(%{"username" => user.username})
+    user = Forge.saved_user TestRepo
+    {:error, changeset} = Registrator.changeset(%{@valid_username_params | "username" => user.username})
+    |> TestRepo.insert
 
     assert changeset.errors[:username] == "has already been taken"
   end
