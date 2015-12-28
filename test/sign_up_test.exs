@@ -62,7 +62,7 @@ defmodule SignUpTest do
 
   test "sign up with custom validations" do
     Application.put_env(:phoenix_token_auth, :user_model_validator, fn changeset ->
-      Ecto.Changeset.add_error(changeset, :password, :too_short)
+      Ecto.Changeset.add_error(changeset, :password, "too_short")
     end)
     conn = call(TestRouter, :post, "/api/users", %{user: %{email: @email, password: @password}}, @headers)
     assert conn.status == 422

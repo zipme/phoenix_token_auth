@@ -29,13 +29,13 @@ defmodule PhoenixTokenAuth.Confirmator do
   to the changeset.
   """
   def confirmation_changeset(user = %{confirmed_at: nil}, params) do
-    Changeset.cast(user, params, [])
+    Changeset.cast(user, params, [], [])
     |> Changeset.put_change(:hashed_confirmation_token, nil)
     |> Changeset.put_change(:confirmed_at, Ecto.DateTime.utc)
     |> validate_token
   end
   def confirmation_changeset(user = %{unconfirmed_email: unconfirmed_email}, params) when unconfirmed_email != nil do
-    Changeset.cast(user, params, [])
+    Changeset.cast(user, params, [], [])
     |> Changeset.put_change(:hashed_confirmation_token, nil)
     |> Changeset.put_change(:unconfirmed_email, nil)
     |> Changeset.put_change(:email, unconfirmed_email)
@@ -50,7 +50,7 @@ defmodule PhoenixTokenAuth.Confirmator do
 
   defp do_validate_token(true, changeset), do: changeset
   defp do_validate_token(false, changeset) do
-    Changeset.add_error changeset, :confirmation_token, :invalid
+    Changeset.add_error changeset, :confirmation_token, "invalid"
   end
 
 end

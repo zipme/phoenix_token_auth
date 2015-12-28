@@ -65,12 +65,12 @@ defmodule RegistratorTest do
 
   test "changeset runs user_model_validator from config" do
     Application.put_env(:phoenix_token_auth, :user_model_validator, fn changeset ->
-      Ecto.Changeset.add_error(changeset, :email, :custom_error)
+      Ecto.Changeset.add_error(changeset, :email, "custom_error")
     end)
     changeset = Registrator.changeset(@valid_params)
 
     assert !changeset.valid?
-    assert changeset.errors[:email] == :custom_error
+    assert changeset.errors[:email] == "custom_error"
   end
 
   test "changeset is valid with username and password" do

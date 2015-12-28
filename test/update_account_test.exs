@@ -72,7 +72,7 @@ defmodule UpdateAccountTest do
   test "update account with custom validations", context do
     with_mock Mailgun.Client, [send_email: fn _, _ -> {:ok, "response"} end] do
       Application.put_env(:phoenix_token_auth, :user_model_validator, fn changeset ->
-        Ecto.Changeset.add_error(changeset, :password, :too_short)
+        Ecto.Changeset.add_error(changeset, :password, "too_short")
       end)
       conn = call(TestRouter, :put, "/api/account", %{account: %{password: @new_password}}, context.headers)
       assert conn.status == 422

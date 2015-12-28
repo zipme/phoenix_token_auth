@@ -28,7 +28,7 @@ defmodule PhoenixTokenAuth.UserHelper do
 
   def persist_token(user, token) do
     alias Ecto.Changeset
-    Changeset.cast(user, %{}, [])
+    Changeset.cast(user, %{}, [], [])
     |> Changeset.put_change(:authentication_tokens, [token | user.authentication_tokens])
     |> Util.repo.update!
     token

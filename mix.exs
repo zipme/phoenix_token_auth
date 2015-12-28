@@ -20,7 +20,7 @@ defmodule PhoenixTokenAuth.Mixfile do
     [applications: applications(Mix.env)]
   end
 
-  defp applications(:test), do: applications(:all) ++ [:blacksmith]
+  defp applications(:test), do: applications(:all) ++ [:blacksmith, :phoenix_ecto]
   defp applications(_all),  do: [:logger]
 
   defp package do
@@ -52,6 +52,7 @@ defmodule PhoenixTokenAuth.Mixfile do
     [
         {:cowboy, "~> 1.0.0"},
         {:phoenix, "~> 1.1.0"},
+        {:phoenix_ecto, "~> 2.0"},
         {:ecto, "~> 1.1.0"},
         {:comeonin, "~> 0.10.0"},
         {:postgrex, ">= 0.6.0"},

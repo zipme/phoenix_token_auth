@@ -10,7 +10,7 @@ defmodule PhoenixTokenAuth.PasswordResetter do
   Returns {unhashed_password_reset_token, changeset}
   """
   def create_changeset(nil) do
-    changeset = Changeset.cast(struct(UserHelper.model), %{}, [])
+    changeset = Changeset.cast(struct(UserHelper.model), %{}, [], [])
     |> Changeset.add_error(:email, "not known")
     {nil, changeset}
   end
@@ -18,7 +18,7 @@ defmodule PhoenixTokenAuth.PasswordResetter do
     {password_reset_token, hashed_password_reset_token} = generate_token
 
     changeset = user
-    |> Changeset.cast(%{}, [])
+    |> Changeset.cast(%{}, [], [])
     |> Changeset.put_change(:hashed_password_reset_token, hashed_password_reset_token)
 
     {password_reset_token, changeset}
@@ -35,7 +35,7 @@ defmodule PhoenixTokenAuth.PasswordResetter do
     {nil, changeset}
   end
   def reset_changeset(user, params) do
-    Changeset.cast(user, params, [])
+    Changeset.cast(user, params, [], [])
     |> Changeset.put_change(:hashed_password_reset_token, nil)
     |> Registrator.set_hashed_password
     |> validate_token
@@ -56,6 +56,6 @@ defmodule PhoenixTokenAuth.PasswordResetter do
 
   defp do_validate_token(true, changeset), do: changeset
   defp do_validate_token(false, changeset) do
-    Changeset.add_error changeset, :password_reset_token, :invalid
+    Changeset.add_error changeset, :password_reset_token, "invalid"
   end
 end

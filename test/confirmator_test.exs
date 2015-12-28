@@ -16,21 +16,21 @@ defmodule ConfirmatorTest do
 
   test "confirmation_changeset adds an error if the token does not match" do
     {_token, user} = Forge.user(hashed_confirmation_token: "123secret")
-    |> Ecto.Changeset.cast(:empty, [])
+    |> Ecto.Changeset.cast(:empty, [], [])
     |> Confirmator.confirmation_needed_changeset
     user = Ecto.Changeset.apply_changes(user)
 
     changeset = Confirmator.confirmation_changeset(user, %{"confirmation_token" => "wrong"})
 
     assert !changeset.valid?
-    assert changeset.errors[:confirmation_token] == :invalid
+    assert changeset.errors[:confirmation_token] == "invalid"
   end
 
   test "confirmation_changeset clears the saved token and sets confirmed at if the token matches" do
     mocked_date = Ecto.DateTime.utc
     with_mock Ecto.DateTime, [:passthrough], [utc: fn -> mocked_date end] do
       {token, user} = Forge.user(hashed_confirmation_token: "123secret")
-      |> Ecto.Changeset.cast(:empty, [])
+      |> Ecto.Changeset.cast(:empty, [], [])
       |> Confirmator.confirmation_needed_changeset
       user = Ecto.Changeset.apply_changes(user)
 

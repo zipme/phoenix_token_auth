@@ -9,7 +9,7 @@ defmodule PhoenixTokenAuth.AccountUpdater do
   Validates that email and password are present and that email is unique.
   """
   def changeset(user, params) do
-    Changeset.cast(user, params, ~w())
+    Changeset.cast(user, params, ~w(), [])
     |> UserHelper.validator
     |> apply_password_change
     |> apply_email_change
